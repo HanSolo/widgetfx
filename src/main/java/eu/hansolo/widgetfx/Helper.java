@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.time.Instant;
 import java.util.Locale;
 
 
@@ -84,41 +85,41 @@ public class Helper {
         sendInfo(Path.of(Constants.HOME_FOLDER, Constants.JSON_FILENAME), title, message);
     }
     public static final void sendInfo(final Path jsonPath, final String title, final String message) throws IOException {
-        show(jsonPath, new Widget().title(title).message(message).style(WidgetStyle.INFO).icon(SFSymbol0.infoCircleFill));
+        show(jsonPath, new Widget().title(title).message(message).style(WidgetStyle.INFO).icon(SFSymbol0.infoCircleFill).timestamp(Instant.now()));
     }
 
     public static final void sendSuccess(final String title, final String message) throws IOException {
         sendSuccess(Path.of(Constants.HOME_FOLDER, Constants.JSON_FILENAME), title, message);
     }
     public static final void sendSuccess(final Path jsonPath, final String title, final String message) throws IOException {
-        show(jsonPath, new Widget().title(title).message(message).style(WidgetStyle.SUCCESS).icon(SFSymbol0.checkmarkSealFill));
+        show(jsonPath, new Widget().title(title).message(message).style(WidgetStyle.SUCCESS).icon(SFSymbol0.checkmarkSealFill).timestamp(Instant.now()));
     }
 
     public static final void sendWarning(final String title, final String message) throws IOException {
         sendWarning(Path.of(Constants.HOME_FOLDER, Constants.JSON_FILENAME), title, message);
     }
     public static final void sendWarning(final Path jsonPath, final String title, final String message) throws IOException {
-        show(jsonPath, new Widget().title(title).message(message).style(WidgetStyle.WARNING).icon(SFSymbol0.exclamationmarkTriangleFill));
+        show(jsonPath, new Widget().title(title).message(message).style(WidgetStyle.WARNING).icon(SFSymbol0.exclamationmarkTriangleFill).timestamp(Instant.now()));
     }
 
     public static final void sendError(final String title, final String message) throws IOException {
         sendError(Path.of(Constants.HOME_FOLDER, Constants.JSON_FILENAME), title, message);
     }
     public static final void sendError(final Path jsonPath, final String title, final String message) throws IOException {
-        show(jsonPath, new Widget().title(title).message(message).style(WidgetStyle.ERROR).icon(SFSymbol0.xmarkOctagonFill).badge("!"));
+        show(jsonPath, new Widget().title(title).message(message).style(WidgetStyle.ERROR).icon(SFSymbol0.xmarkOctagonFill).badge("!").timestamp(Instant.now()));
     }
 
     public static final void sendMetric(final String title, final String message, final double value, final String unit) throws IOException {
         sendMetric(Path.of(Constants.HOME_FOLDER, Constants.JSON_FILENAME), title, message, value, unit);
     }
     public static final void sendMetric(final Path jsonPath, final String title, final String message, final double value, final String unit) throws IOException {
-        show(jsonPath, new Widget().title(title).message(message).value(value).unit(unit).style(WidgetStyle.METRIC).icon(SFSymbol0.chartBarFill));
+        show(jsonPath, new Widget().title(title).message(message).value(value).unit(unit).style(WidgetStyle.METRIC).icon(SFSymbol0.chartBarFill).timestamp(Instant.now()));
     }
 
     public static final void sendProgress(final String title, final String message, final double percentage) throws IOException {
         sendProgress(Path.of(Constants.HOME_FOLDER, Constants.JSON_FILENAME), title, message, percentage);
     }
     public static final void sendProgress(final Path jsonPath, final String title, final String message, final double percentage) throws IOException {
-        show(jsonPath, new Widget().title(title).message(message).progress(percentage).style(WidgetStyle.PROGRESS).icon(SFSymbol0.arrowUpCircleFill).badge((int) Math.round(percentage * 100) + "%"));
+        show(jsonPath, new Widget().title(title).message(message).progress(percentage).style(WidgetStyle.PROGRESS).icon(SFSymbol0.arrowUpCircleFill).badge((int) Math.round(percentage * 100) + "%").timestamp(Instant.now()));
     }
 }
