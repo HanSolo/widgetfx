@@ -11,4 +11,5 @@ module eu.hansolo.widgetfx {
     requires com.google.gson;
 
     exports eu.hansolo.widgetfx;
+    exports eu.hansolo.widgetfx.demo;
 }

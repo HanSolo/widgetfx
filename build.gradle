@@ -51,7 +51,7 @@ description = "A little JavaFX app that demonstrates the usage of the Swift base
 
 application {
     mainModule = 'eu.hansolo.widgetfx'
-    mainClass  = 'eu.hansolo.widgetfx.Launcher'
+    mainClass  = 'eu.hansolo.widgetfx.demo.Launcher'
 }
 
 jar {
@@ -82,7 +82,7 @@ jar {
                 'Bundle-Version'        : project.version,
                 'Bundle-SymbolicName'   : 'eu.hansolo.widgetfx',
                 'Class-Path'            : '${project.name}-${project.version}.jar',
-                'Main-Class'            : 'eu.hansolo.widgetfx.Launcher'
+                'Main-Class'            : 'eu.hansolo.widgetfx.demo.Launcher'
         )
     }
 }
@@ -101,7 +101,7 @@ tasks.register('demo', JavaExec) {
     group       = 'WidgetFX'
     description = 'Runs the widget demo (writes to ~/widget_data.json)'
     classpath   = sourceSets.main.runtimeClasspath
-    mainClass   = 'eu.hansolo.widgetfx.Launcher'
+    mainClass   = 'eu.hansolo.widgetfx.demo.Launcher'
 }
 
 run {

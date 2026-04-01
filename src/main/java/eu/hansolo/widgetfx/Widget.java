@@ -67,7 +67,7 @@ public class Widget {
 
     public Widget timestamp() { return this.timestamp(Instant.now()); }
     public Widget timestamp(final Instant timestamp) {
-        this.timestamp = (double) timestamp.getEpochSecond();
+        this.timestamp = Double.valueOf(timestamp.getEpochSecond());
         return this;
     }
 }

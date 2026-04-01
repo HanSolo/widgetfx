@@ -1,61 +1,23 @@
-package eu.hansolo.widgetfx;
+package eu.hansolo.widgetfx.demo;
 
+import eu.hansolo.widgetfx.Helper;
+import eu.hansolo.widgetfx.SFSymbol0;
+import eu.hansolo.widgetfx.Widget;
+import eu.hansolo.widgetfx.WidgetStyle;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Control;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.Instant;
 
 
 public class Main extends Application {
-
-    /*
-    System.out.println("1) Info");
-        Helper.sendInfo("Java-Demo", "Connection established");
-        Thread.sleep(2000);
-
-        System.out.println("2) Progress 30% …");
-        Helper.sendProgress("Upload", "File will be transferred…", 0.30);
-        Thread.sleep(2500);
-
-        System.out.println("3) Progress 70%");
-        Helper.sendProgress("Upload", "File will be transferred…", 0.70);
-        Thread.sleep(2500);
-
-        System.out.println("4) Success");
-        Helper.sendSuccess("Upload finished", "All files transferred");
-        Thread.sleep(2000);
-
-        System.out.println("5) Metric");
-        Helper.sendMetric("Temperature", "Server room rack 3", 38.7, "°C");
-        Thread.sleep(2000);
-
-        System.out.println("6) Warning");
-        Helper.sendWarning("Memory low", "Less than 10% available");
-        Thread.sleep(2000);
-
-        System.out.println("7) Error");
-        Helper.sendError("DB-Connection failed", "Host db.local:5432 not reachable");
-        Thread.sleep(2000);
-
-        System.out.println("8) Custom color");
-        Helper.show(Widget.create()
-                          .title("Custom Color")
-                          .message("RGB-Color directly set from Java")
-                          .color(new WidgetColor(1.0, 0.8, 0.0))
-                          .icon(SFSymbol0.paintpaletteFill.icon())
-                          .style("info")
-                          .timestamp());
-
-        System.out.println("Demo finished");
-     */
-
     private VBox mainPane;
     private Button infoButton;
     private Button progressButton;
@@ -63,6 +25,7 @@ public class Main extends Application {
     private Button metricButton;
     private Button warningButton;
     private Button errorButton;
+    private Button sendTcpButton;
 
 
     @Override public void init() {
@@ -84,7 +47,10 @@ public class Main extends Application {
         errorButton    = new Button("Error");
         errorButton.setPrefWidth(150);
 
-        mainPane = new VBox(20, infoButton, progressButton, successButton, metricButton, warningButton, errorButton);
+        sendTcpButton = new Button("Via TCP");
+        sendTcpButton.setPrefWidth(150);
+
+        mainPane = new VBox(20, infoButton, progressButton, successButton, metricButton, warningButton, errorButton, sendTcpButton);
 
         registerListeners();
     }
@@ -107,6 +73,11 @@ public class Main extends Application {
         });
         errorButton.setOnAction(evt -> {
             try { Helper.sendError("DB-Connection failed", "Host db.local:5432 not reachable"); } catch (IOException e) { throw new RuntimeException(e); }
+        });
+        sendTcpButton.setOnAction(evt -> {
+            final Widget tcpWidget = new Widget().title("TCP Info").message("Info send via TCP socket").style(WidgetStyle.INFO).icon(SFSymbol0.infoCircleFill).timestamp();
+            final String json = Helper.toJson(tcpWidget);
+            try { Helper.sendViaTcp(json); } catch (Exception e) { throw new RuntimeException(e); }
         });
     }
 

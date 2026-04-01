@@ -3,8 +3,14 @@ package eu.hansolo.widgetfx;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.Reader;
+import java.net.ConnectException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,11 +21,11 @@ import java.util.Locale;
 
 public class Helper {
     public static final String keyValue(final String key, final String value) {
-        return "  \"" + key + "\": \"" + escape(value) + "\",\n";
+        return "\"" + key + "\":\"" + escape(value) + "\",";
     }
 
     public static final String keyValueNumeric(final String key, final double value) {
-        return String.format(Locale.US, "  \"%s\": %.4f,\n", key, value);
+        return String.format(Locale.US, "\"%s\":%.4f,", key, value);
     }
 
     public static final String escape(final String text) {
@@ -49,7 +55,7 @@ public class Helper {
         }
     }
 
-    public Widget read(final Path jsonPath) throws IOException {
+    public static final Widget read(final Path jsonPath) throws IOException {
         if (!Files.exists(jsonPath)) { return null; }
         final Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (Reader reader = Files.newBufferedReader(jsonPath, StandardCharsets.UTF_8)) {
@@ -57,8 +63,21 @@ public class Helper {
         }
     }
 
+    public static final void sendViaTcp(final Widget widget) { sendViaTcp(toJson(widget)); }
+    public static final void sendViaTcp(final String json) {
+        try (Socket socket = new Socket(Constants.TCP_HOST, Constants.TCP_PORT)) {
+            final PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8)), true);
+            out.println(json); // println adds the '\n' delimiter Swift reads
+        } catch (ConnectException ex) {
+            System.err.println("Could not connect — is the Swift app running and listening on port " + Constants.TCP_PORT + "?");
+        } catch (IOException ex) {
+            System.err.println("Error: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+
     public static final String toJson(final Widget widget) {
-        StringBuilder sb = new StringBuilder("{\n");
+        StringBuilder sb = new StringBuilder("{");
         sb.append(Helper.keyValue(Constants.FIELD_TITLE, widget.title));
         sb.append(Helper.keyValue(Constants.FIELD_MESSAGE, widget.message));
         sb.append(Helper.keyValue(Constants.FIELD_STYLE, widget.style));
@@ -73,9 +92,9 @@ public class Helper {
               .append(String.format(Locale.US, Constants.FIELD_GREEN, widget.color.green()))
               .append(String.format(Locale.US, Constants.FIELD_BLUE, widget.color.blue()))
               .append(String.format(Locale.US, Constants.FIELD_ALPHA, widget.color.alpha()))
-              .append("  },\n");
+              .append("},");
         }
-        sb.append(Constants.FIELD_TIMESTAMP).append(widget.timestamp).append("\n}");
+        sb.append(Constants.FIELD_TIMESTAMP).append(widget.timestamp).append("}");
         return sb.toString();
     }
 
