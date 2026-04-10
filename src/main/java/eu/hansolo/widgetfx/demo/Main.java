@@ -26,6 +26,7 @@ public class Main extends Application {
     private Button warningButton;
     private Button errorButton;
     private Button sendTcpButton;
+    private Button sendUdpButton;
 
 
     @Override public void init() {
@@ -50,7 +51,10 @@ public class Main extends Application {
         sendTcpButton = new Button("Via TCP");
         sendTcpButton.setPrefWidth(150);
 
-        mainPane = new VBox(20, infoButton, progressButton, successButton, metricButton, warningButton, errorButton, sendTcpButton);
+        sendUdpButton = new Button("Via UDP");
+        sendUdpButton.setPrefWidth(150);
+
+        mainPane = new VBox(20, infoButton, progressButton, successButton, metricButton, warningButton, errorButton, sendTcpButton, sendUdpButton);
 
         registerListeners();
     }
@@ -78,6 +82,11 @@ public class Main extends Application {
             final Widget tcpWidget = new Widget().title("TCP Info").message("Info send via TCP socket").style(WidgetStyle.INFO).icon(SFSymbol0.infoCircleFill).timestamp();
             final String json = Helper.toJson(tcpWidget);
             try { Helper.sendViaTcp(json); } catch (Exception e) { throw new RuntimeException(e); }
+        });
+        sendUdpButton.setOnAction(evt -> {
+            final Widget udpWidget = new Widget().title("UDP Info").message("Info send via UDP socket").style(WidgetStyle.INFO).icon(SFSymbol0.infoCircleFill).timestamp();
+            final String json = Helper.toJson(udpWidget);
+            try { Helper.sendViaUdp(json); } catch (Exception e) { throw new RuntimeException(e); }
         });
     }
 

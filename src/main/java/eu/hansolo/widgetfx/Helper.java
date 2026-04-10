@@ -9,8 +9,13 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.net.ConnectException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -70,6 +75,20 @@ public class Helper {
             out.println(json); // println adds the '\n' delimiter Swift reads
         } catch (ConnectException ex) {
             System.err.println("Could not connect — is the Swift app running and listening on port " + Constants.TCP_PORT + "?");
+        } catch (IOException ex) {
+            System.err.println("Error: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+
+    public static final void sendViaUdp(final Widget widget) { sendViaUdp(toJson(widget)); }
+    public static final void sendViaUdp(final String json) {
+        try {
+            InetAddress    address = InetAddress.getLocalHost(); //InetAddress.getByName("localhost");
+            DatagramSocket socket  = new DatagramSocket();
+            byte[]         buffer  = json.getBytes(StandardCharsets.UTF_8);
+            DatagramPacket packet  = new DatagramPacket(buffer, buffer.length, address, Constants.UDP_PORT);
+            socket.send(packet);
         } catch (IOException ex) {
             System.err.println("Error: " + ex.getMessage());
             ex.printStackTrace();
