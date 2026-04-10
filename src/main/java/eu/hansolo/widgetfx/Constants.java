@@ -6,6 +6,7 @@ public class Constants {
 
     public static final String TCP_HOST        = "127.0.01";
     public static final int    TCP_PORT        = 9000;
+    public static final String UDP_HOST        = "255.255.255.255";
     public static final int    UDP_PORT        = 9999;
     public static final String FIELD_TITLE     = "title";
     public static final String FIELD_MESSAGE   = "message";

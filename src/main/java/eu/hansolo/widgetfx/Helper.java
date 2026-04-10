@@ -84,7 +84,7 @@ public class Helper {
     public static final void sendViaUdp(final Widget widget) { sendViaUdp(toJson(widget)); }
     public static final void sendViaUdp(final String json) {
         try {
-            InetAddress    address = InetAddress.getLocalHost(); //InetAddress.getByName("localhost");
+            InetAddress    address = InetAddress.getByName(Constants.UDP_HOST); //InetAddress.getLocalHost();
             DatagramSocket socket  = new DatagramSocket();
             byte[]         buffer  = json.getBytes(StandardCharsets.UTF_8);
             DatagramPacket packet  = new DatagramPacket(buffer, buffer.length, address, Constants.UDP_PORT);
